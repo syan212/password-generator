@@ -1,17 +1,19 @@
+import secrets
+
 from rich import print as rprint
 from rich.console import Console
-
-import secrets
 
 console = Console()
 
 default_chars = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-=[];\'#,./!"$%^&*()_+{}:@~<>?'
 
-def generate_password(length, chars):
+
+def generate_password(length: int, chars: list[str]) -> str:
     result = ''
     for _ in range(length):
         result += secrets.choice(chars)
     return result
+
 
 length = console.input('[green]Enter length of password: [/]')
 try:
@@ -23,14 +25,14 @@ except ValueError:
 use_default_chars = console.input('[green]Use default characters? ([/][light_green]y[/]/[red]n[/][green])[/] ').lower()
 
 chars = (
-    [char for char in default_chars] if use_default_chars == 'y' else 
-    [char for char in console.input('[green]Enter custom characters: [/]')] if use_default_chars == 'n' else
+    list(default_chars) if use_default_chars == 'y' else 
+    list(console.input('[green]Enter custom characters: [/]')) if use_default_chars == 'n' else
     []
 )
 
 if not chars:
     rprint('Invalid option or no characters entered. Using default characters.')
-    chars = [char for char in default_chars]
+    chars = list(default_chars)
 
 rprint('[b green]Generated password[/]')
 rprint(f'[b green]{generate_password(length, chars)}[/]')
